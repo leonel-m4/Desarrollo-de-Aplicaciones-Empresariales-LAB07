@@ -41,7 +41,7 @@ El inicio está en `http://127.0.0.1:8000/`, las noticias en `/noticias/`, el la
 
 ### Ejercicios conservados y verificación
 
-Las funciones **q1–q4** de `blog/duel/team.py` se reservan para el trabajo individual sin IA. **q5–q8** se implementaron con asistencia declarada en [el entregable](entregable/LAB07.md); cada una devuelve un QuerySet y se valida con una consulta. Las respuestas de `blog/duel/ai_answers.py` mantienen sus errores de práctica y la portada todavía conserva el problema N+1 en `blog/queries.py`. Las acciones de IA solo se ejecutan desde la consola, no desde la página pública.
+Las funciones **q1–q4** de `blog/duel/team.py` se reservan para el trabajo individual sin IA. **q5–q8** se implementaron con asistencia declarada en [el entregable](entregable/LAB07.md); cada una devuelve un QuerySet y se valida con una consulta. La portada se optimizó de **23 a 2 consultas** y las respuestas de `blog/duel/ai_answers.py` mantienen sus errores de práctica. Las acciones de IA solo se ejecutan desde la consola, no desde la página pública.
 
 ```powershell
 .\.venv\Scripts\python.exe manage.py check
@@ -49,11 +49,11 @@ Las funciones **q1–q4** de `blog/duel/team.py` se reservan para el trabajo ind
 .\.venv\Scripts\python.exe manage.py test --verbosity 2
 ```
 
-Hay **49 pruebas definidas**: 18 de películas y noticias, 24 del laboratorio ORM y 7 de integración. En la plantilla inicial, la suite completa tiene **un fallo intencional**, `test_front_page_runs_two_queries`, y dos pruebas omitidas porque no se incluye la carpeta privada `teacher/`. Ese fallo se conserva como parte del ejercicio, no es una regresión de la fusión.
+Hay **49 pruebas definidas**: 18 de películas y noticias, 24 del laboratorio ORM y 7 de integración. Después de optimizar la portada, **47 pasan y 2 se omiten** porque no se incluye la carpeta privada `teacher/`. No hay fallos. La suite admite q1–q4 pendientes para el trabajo individual, pero exige que q5–q8 sean correctas y eficientes; aprobar la suite no significa haber completado las ocho preguntas del duelo.
 
-La verificación de la fusión obtuvo **46 pruebas correctas, 2 omitidas y ese único fallo de práctica**: la portada ejecuta 23 consultas frente a las 2 esperadas. `check`, la comprobación de migraciones pendientes y `makemigrations --check --dry-run` no encontraron problemas. Se comprobaron por HTTP las tres secciones, categorías, detalles, recomendaciones, acceso al administrador y CSS del blog. El HTML del blog se probó en viewports de 1440, 390 y 320 píxeles, y el inicio a 320 píxeles, sin desbordamiento horizontal y con los cuatro enlaces de navegación visibles.
+La línea base anterior al arreglo conserva el fallo `23 != 2` y sus 23 consultas en [test_portada_antes.txt](entregable/evidencias/test_portada_antes.txt). La ejecución corregida está en [test_portada_despues.txt](entregable/evidencias/test_portada_despues.txt) y la suite actual en [suite_completa.txt](entregable/evidencias/suite_completa.txt). En la verificación inicial de la fusión también se comprobaron por HTTP las secciones y recursos, y el HTML del blog en viewports de 1440, 390 y 320 píxeles, sin desbordamiento horizontal. Las mediciones anteriores y actuales son evidencias separadas, no se reemplaza la línea base.
 
-Para comprobar la fusión y el resto de funcionalidades sin ejecutar el ejercicio de rendimiento pendiente:
+Para comprobar solamente la fusión, consultas y datos:
 
 ```powershell
 .\.venv\Scripts\python.exe manage.py test movies news blog.tests.test_integration blog.tests.test_seed blog.tests.test_duel blog.tests.test_agent --verbosity 2

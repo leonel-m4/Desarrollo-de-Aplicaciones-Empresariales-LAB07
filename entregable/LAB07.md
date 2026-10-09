@@ -105,7 +105,21 @@ Con `N` artículos publicados, esta implementación ejecuta `1 + 2N` consultas. 
 
 ## 11. Optimización y suite completa
 
-Pendiente de aplicar y registrar el arreglo. Se conservará la evidencia anterior para comparar la ejecución de la misma página antes y después.
+Se corrigió `blog/queries.py`, sin modificar las respuestas individuales q1–q4:
+
+- `select_related("author")` utiliza un JOIN para cargar el autor junto con el artículo. Corresponde a una relación de un solo objeto por artículo.
+- `prefetch_related("tags")` realiza una consulta adicional para todas las etiquetas y distribuye los resultados entre los artículos. Corresponde a una relación muchos a muchos; un JOIN directo duplicaría filas de artículos.
+
+| Medición sobre los 11 artículos publicados | Antes | Después |
+| --- | --- | --- |
+| Consulta principal de artículos | 1 | 1, incluye autores por JOIN |
+| Consultas separadas de autor | 11 | 0 |
+| Consultas de etiquetas | 11 | 1, para todos los artículos |
+| **Total** | **23** | **2** |
+
+Evidencia posterior: [portada_despues.json](evidencias/portada_despues.json), con las dos sentencias SQL. La prueba de portada pasa: [test_portada_despues.txt](evidencias/test_portada_despues.txt). La suite completa registra **49 pruebas: 47 correctas, 2 omitidas por ausencia de `teacher/` y ningún fallo**: [suite_completa.txt](evidencias/suite_completa.txt).
+
+Con artículos publicados, el número de consultas de estas relaciones ya no crece como `1 + 2N`. Si la portada está vacía, Django puede omitir la precarga de etiquetas y ejecutar solo la consulta principal. El duelo permanece en 4/8 hasta que el alumno resuelva su parte manual.
 
 ## 12–14. Intenciones, comentario hostil y aprobación
 
@@ -117,6 +131,7 @@ Pendientes de registrar las cuatro intenciones del README, el borrado autorizado
 | --- | --- | --- |
 | q1–q4 | No se solicitó resolverlas | Se dejan para el trabajo individual del alumno. |
 | q5–q8 | Implementar las otras consultas con ayuda declarada | Se aceptan tras verificar resultados y presupuesto: correctas, una consulta por pregunta. |
+| Optimización N+1 | Usar las cargas relacionadas apropiadas | Se acepta `select_related` para autor y `prefetch_related` para etiquetas tras medir 23→2 y aprobar la suite. |
 | Respuestas preexistentes | Ejecutarlas y clasificar sus fallos | Se aceptan q1, q2 y q7 por su veredicto; q3, q5, q6 y q8 se rechazan. q4 se rechaza como solución eficiente pese a devolver el resultado correcto. |
 | Esquema y evidencias | Preparar una referencia y capturar resultados reales | Se utiliza como apoyo; no acredita un dibujo manual ni intentos personales. |
 | Paso 8 | No solicitado sin autorización docente | Omitido. |

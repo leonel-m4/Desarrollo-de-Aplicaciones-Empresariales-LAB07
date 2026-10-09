@@ -25,13 +25,13 @@
             <article class="orm-exercise">
                 <span class="eyebrow-label">01 · El duelo</span>
                 <h3>Escribe y compara consultas</h3>
-                <p>Completa las ocho funciones de <code>blog/duel/team.py</code> y compáralas con las respuestas guardadas de la IA.</p>
+                <p>Completa q1–q4 sin IA en <code>blog/duel/team.py</code>. q5–q8 tienen una implementación asistida documentada en el entregable.</p>
                 <code class="orm-command">python manage.py duel</code>
             </article>
             <article class="orm-exercise">
                 <span class="eyebrow-label">02 · Del rojo al verde</span>
-                <h3>Encuentra el problema N+1</h3>
-                <p>Esta portada conserva el ejercicio de rendimiento. Optimiza <code>blog/queries.py</code> hasta que la prueba espere solo dos consultas.</p>
+                <h3>Una portada, dos consultas</h3>
+                <p><code>blog/queries.py</code> carga autores con <code>select_related</code> y etiquetas con <code>prefetch_related</code>. Con los datos del laboratorio, la portada pasó de 23 a 2 consultas.</p>
                 <code class="orm-command">python manage.py test blog.tests.test_front_page</code>
             </article>
             <article class="orm-exercise">

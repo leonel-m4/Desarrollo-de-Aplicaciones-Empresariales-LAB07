@@ -62,9 +62,9 @@ print(team.q1().query)
 .\.venv\Scripts\python.exe manage.py test blog.tests.test_front_page
 ```
 
-La prueba `test_front_page_runs_two_queries` **falla a propósito**. La portada funciona, pero consulta el autor y las etiquetas de cada artículo por separado. Corrige únicamente la consulta de `blog/queries.py` hasta que la página se renderice con dos consultas.
+En la plantilla inicial, `test_front_page_runs_two_queries` fallaba a propósito: se ejecutaban 23 consultas para los 11 artículos publicados. En esta copia, `blog/queries.py` usa `select_related("author")` para la clave foránea y `prefetch_related("tags")` para la relación muchos a muchos, por lo que **la prueba ya pasa con dos consultas**. El [entregable](../entregable/LAB07.md) conserva el mensaje de fallo y el SQL anterior y posterior.
 
-La portada ahora hereda de `templates/base.html` y utiliza el navbar y el pie compartidos. Sigue recorriendo `post.author` y `post.tags.all`, por lo que el reto de rendimiento original permanece intacto.
+La portada hereda de `templates/base.html` y utiliza el navbar y el pie compartidos. Sigue recorriendo `post.author` y `post.tags.all`, pero ahora esas relaciones ya están cargadas y no provocan una consulta por artículo.
 
 ## Parte 3 — La frontera
 
@@ -101,7 +101,7 @@ Usa un endpoint compatible con OpenAI y un modelo instalado en tu servidor local
 .\.venv\Scripts\python.exe manage.py test blog --verbosity 2
 ```
 
-Hay 24 pruebas originales y 7 de integración con Nexo. En la plantilla inicial debe fallar únicamente el ejercicio N+1; dos pruebas de referencia se omiten al no estar disponible `teacher/`. La prueba `test_the_starter_has_nothing_written` comprueba el estado inicial de las ocho respuestas: cuando las implementes, actualiza esa comprobación para validar tus respuestas en lugar de esperar que estén pendientes.
+Hay 24 pruebas del laboratorio y 7 de integración con Nexo. Después del arreglo N+1 no hay fallos; dos pruebas de referencia se omiten al no estar disponible `teacher/`. `test_team_answers_are_correct_when_provided` permite respuestas pendientes únicamente en q1–q4. Cuando implementes una, deberá devolver el resultado correcto con el presupuesto de consultas; q5–q8 siempre deben estar implementadas y pasar. Completar esas cuatro respuestas y registrar tus intentos sigue siendo trabajo individual pendiente.
 
 | Ruta | Función |
 | --- | --- |
@@ -110,7 +110,7 @@ Hay 24 pruebas originales y 7 de integración con Nexo. En la plantilla inicial 
 | `blog/duel/team.py` | Tus ocho respuestas. |
 | `blog/duel/ai_answers.py` | Respuestas guardadas de la IA. |
 | `blog/duel/questions.py` | Contratos, respuestas esperadas y presupuestos de consultas. |
-| `blog/queries.py` | Consulta de la portada, pendiente de optimizar. |
+| `blog/queries.py` | Consulta optimizada de la portada: JOIN de autor y precarga de etiquetas. |
 | `blog/agent/` | Pasarela de acciones y adaptador opcional al modelo. |
 | `blog/tests/test_integration.py` | Rutas, navegación, administrador y separación de datos. |
 
