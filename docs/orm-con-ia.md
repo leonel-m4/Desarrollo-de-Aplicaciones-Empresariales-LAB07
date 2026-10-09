@@ -2,7 +2,7 @@
 
 Este es el laboratorio extra de la semana 7 de Desarrollo de Aplicaciones Empresariales, integrado desde `dae-s07-orm-con-ia`. El blog tiene autores, perfiles, artículos, categorías, etiquetas y comentarios para practicar ocho consultas del ORM de Django y verificar lo que produce una IA.
 
-La guía docente y su rúbrica están en el campus virtual. Esta integración conserva la plantilla de ejercicios: no aporta soluciones ni incluye la carpeta privada `teacher/`.
+La guía docente y su rúbrica están en el campus virtual. En esta copia, **q1–q4 siguen reservadas para resolverlas personalmente sin IA**; q5–q8 tienen una implementación asistida declarada en [el entregable](../entregable/LAB07.md). No se incluye la carpeta privada `teacher/`.
 
 ## Preparación
 

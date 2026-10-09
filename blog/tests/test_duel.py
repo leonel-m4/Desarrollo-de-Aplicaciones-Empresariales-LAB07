@@ -23,8 +23,12 @@ class DuelTests(TestCase):
     def test_reference_solutions_are_all_correct_and_cheap(self):
         self.assertEqual(set(self.statuses("solutions").values()), {"ok"})
 
-    def test_the_starter_has_nothing_written(self):
-        self.assertEqual(set(self.statuses("team").values()), {"todo"})
+    def test_team_answers_are_correct_when_provided(self):
+        for verdict in run_all("team"):
+            with self.subTest(question=verdict.key):
+                if verdict.key in {"q1", "q2", "q3", "q4"} and verdict.status == "todo":
+                    continue  # The student must complete these without AI.
+                self.assertEqual(verdict.status, "ok", verdict.detail)
 
     def test_the_assistant_fails_where_the_lab_says(self):
         self.assertEqual(

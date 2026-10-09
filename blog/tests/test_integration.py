@@ -75,7 +75,7 @@ class NexoIntegrationTests(TestCase):
         self.assertTrue(self.article.categories.filter(pk=self.category.pk).exists())
         self.assertTrue(get_user_model().objects.filter(pk=self.admin.pk).exists())
 
-    def test_lab_commands_are_available_without_solving_the_exercises(self):
+    def test_lab_commands_allow_pending_manual_answers(self):
         commands = get_commands()
         for command in ("seed_blog", "duel", "agent"):
             self.assertEqual(commands[command], "blog")
@@ -83,7 +83,7 @@ class NexoIntegrationTests(TestCase):
         self.assertEqual(commands["seed_news"], "news")
         out = StringIO()
         call_command("duel", source="team", stdout=out)
-        self.assertEqual(out.getvalue().count("sin escribir"), 8)
+        self.assertLessEqual(out.getvalue().count("sin escribir"), 4)
         buffer = BytesIO()
         with TextIOWrapper(buffer, encoding="cp1252", write_through=True) as output:
             call_command("duel", source="ai", stdout=output)

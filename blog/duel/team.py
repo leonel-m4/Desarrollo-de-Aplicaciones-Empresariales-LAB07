@@ -9,6 +9,9 @@ filter. Check yourself with:
 
 Question 5 asks for two numbers per post: annotate them as `n_comments` and
 `n_tags`.
+
+Questions 1-4 are reserved for the student's unaided work. Questions 5-8 were
+implemented with AI assistance, disclosed in entregable/LAB07.md.
 """
 from datetime import date  # noqa: F401  (you will need it in question 3)
 
@@ -40,19 +43,28 @@ def q4():
 def q5():
     """Los tres artículos publicados con más comentarios; de cada uno, cuántos comentarios
     (`n_comments`) y cuántas etiquetas (`n_tags`)."""
-    raise NotImplementedError
+    return (
+        Post.objects.filter(published=True)
+        .annotate(
+            n_comments=Count("comments", distinct=True),
+            n_tags=Count("tags", distinct=True),
+        )
+        .order_by("-n_comments", "pk")[:3]
+    )
 
 
 def q6():
     """Los artículos escritos por autores de Perú (publicados o no)."""
-    raise NotImplementedError
+    return Post.objects.filter(author__profile__country="Perú")
 
 
 def q7():
     """Los comentarios de los artículos de la categoría «Tecnología»."""
-    raise NotImplementedError
+    return Comment.objects.filter(post__category__name="Tecnología")
 
 
 def q8():
     """Los autores que nunca han publicado un artículo."""
-    raise NotImplementedError
+    return Author.objects.annotate(
+        n_published=Count("posts", filter=Q(posts__published=True))
+    ).filter(n_published=0)

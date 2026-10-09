@@ -58,9 +58,21 @@ erDiagram
 | q2 | Pendiente del alumno, sin IA | Por completar |
 | q3 | Pendiente del alumno, sin IA | Por completar |
 | q4 | Pendiente del alumno, sin IA | Por completar |
-| q5–q8 | Pendientes de implementación asistida | No se atribuyen intentos humanos |
+| q5 | Correcta, 1 consulta | 1 versión asistida validada; no se atribuyen intentos humanos |
+| q6 | Correcta, 1 consulta | 1 versión asistida validada; no se atribuyen intentos humanos |
+| q7 | Correcta, 1 consulta | 1 versión asistida validada; no se atribuyen intentos humanos |
+| q8 | Correcta, 1 consulta | 1 versión asistida validada; no se atribuyen intentos humanos |
 
 Anotar los intentos reales de q1–q4, incluyendo las versiones fallidas y sus mensajes. Si alguna no se resuelve, documentar lo probado; no sustituirlo por una respuesta generada por IA.
+
+Las implementaciones asistidas q5–q8 devolvieron QuerySets y aprobaron la primera versión comprobada. Las reejecuciones para evidencias y regresión no representan nuevos intentos de resolución. La salida está en [duel_equipo.txt](evidencias/duel_equipo.txt), su SQL en [consultas_equipo.json](evidencias/consultas_equipo.json) y las pruebas en [test_consultas_equipo.txt](evidencias/test_consultas_equipo.txt).
+
+- q5 cuenta identificadores distintos de comentarios y etiquetas, evitando el producto de los JOIN, y usa un desempate por clave primaria.
+- q6 sigue la relación `author__profile__country`, que sí existe en el modelo.
+- q7 sigue `post__category__name`, sin excluir artículos solo por no estar publicados.
+- q8 cuenta únicamente artículos publicados y selecciona los autores con cero: incluye a quienes solo tienen borradores y a quienes no tienen ningún artículo.
+
+El duelo todavía muestra **4 de 8 correctas** porque q1–q4 están pendientes, no porque las cuatro implementaciones asistidas hayan fallado. La suite permite ese trabajo manual pendiente, pero exige que q5–q8 sean correctas y eficientes. Cuando el alumno complete una de q1–q4, también deberá pasar su comprobación; una suite verde no acredita por sí sola que haya terminado el duelo.
 
 ## 6–7. Comparación con las respuestas de IA incluidas
 
@@ -104,6 +116,7 @@ Pendientes de registrar las cuatro intenciones del README, el borrado autorizado
 | Uso | Solicitado | Respuesta / decisión |
 | --- | --- | --- |
 | q1–q4 | No se solicitó resolverlas | Se dejan para el trabajo individual del alumno. |
+| q5–q8 | Implementar las otras consultas con ayuda declarada | Se aceptan tras verificar resultados y presupuesto: correctas, una consulta por pregunta. |
 | Respuestas preexistentes | Ejecutarlas y clasificar sus fallos | Se aceptan q1, q2 y q7 por su veredicto; q3, q5, q6 y q8 se rechazan. q4 se rechaza como solución eficiente pese a devolver el resultado correcto. |
 | Esquema y evidencias | Preparar una referencia y capturar resultados reales | Se utiliza como apoyo; no acredita un dibujo manual ni intentos personales. |
 | Paso 8 | No solicitado sin autorización docente | Omitido. |

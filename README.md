@@ -41,7 +41,7 @@ El inicio está en `http://127.0.0.1:8000/`, las noticias en `/noticias/`, el la
 
 ### Ejercicios conservados y verificación
 
-La fusión **no resuelve los ejercicios de la semana 7**: las ocho funciones de `blog/duel/team.py` siguen pendientes, las respuestas de `blog/duel/ai_answers.py` mantienen sus errores de práctica y la portada conserva el problema N+1 en `blog/queries.py`. El blog utiliza el layout y la navegación de Nexo, pero las acciones de IA solo se ejecutan desde la consola, no desde la página pública.
+Las funciones **q1–q4** de `blog/duel/team.py` se reservan para el trabajo individual sin IA. **q5–q8** se implementaron con asistencia declarada en [el entregable](entregable/LAB07.md); cada una devuelve un QuerySet y se valida con una consulta. Las respuestas de `blog/duel/ai_answers.py` mantienen sus errores de práctica y la portada todavía conserva el problema N+1 en `blog/queries.py`. Las acciones de IA solo se ejecutan desde la consola, no desde la página pública.
 
 ```powershell
 .\.venv\Scripts\python.exe manage.py check
