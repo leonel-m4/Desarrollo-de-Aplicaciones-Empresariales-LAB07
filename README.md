@@ -46,6 +46,19 @@ Solo para preparar **una base nueva** con los ejemplos de las tres aplicaciones:
 
 El inicio está en `http://127.0.0.1:8000/`, las noticias en `/noticias/`, el laboratorio en `/blog/` y el administrador de las tres aplicaciones en `/admin/`.
 
+#### Si películas y noticias aparecen vacías
+
+La base `db.sqlite3` y los archivos generados en `media/` son locales y están excluidos de Git. Clonar o actualizar el repositorio no copia los datos ni los usuarios de otra instalación; los comandos de carga y las imágenes fuente de las noticias sí están versionados.
+
+Si la base ya está migrada y **todavía no tiene películas ni noticias**, carga esas dos secciones con:
+
+```powershell
+.\.venv\Scripts\python.exe manage.py seed_lab
+.\.venv\Scripts\python.exe manage.py seed_news
+```
+
+Esto carga **10 películas y 6 noticias con imágenes**, sin reiniciar los datos del blog ni modificar sus consultas o evidencias. **No repitas `seed_blog` si el laboratorio ORM ya está preparado.** Tampoco ejecutes `seed_lab` sobre un catálogo que quieras conservar: reemplaza sus películas y valoraciones. Después, recarga la página.
+
 ### Ejercicios conservados y verificación
 
 **Las ocho respuestas de `blog/duel/team.py` están guardadas y validadas: 8/8 correctas y baratas**, con una consulta SQL por pregunta. Las capturas y los resultados están en [Consultas e intentos](#45-consultas-del-equipo-e-intentos). La portada se optimizó de **23 a 2 consultas** y las respuestas de `blog/duel/ai_answers.py` mantienen sus errores de práctica. Las acciones del agente solo se ejecutan desde la consola, no desde la página pública.
