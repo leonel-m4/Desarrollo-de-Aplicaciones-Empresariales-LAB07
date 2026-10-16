@@ -1,8 +1,10 @@
 # ORM con IA — duelo y verificador dentro de Nexo
 
+**Documentación centralizada:** el [README principal](../README.md#laboratorio-orm-con-ia) reúne esta guía y el entregable completo de los 15 pasos. Esta guía se conserva como referencia anterior.
+
 Este es el laboratorio extra de la semana 7 de Desarrollo de Aplicaciones Empresariales, integrado desde `dae-s07-orm-con-ia`. El blog tiene autores, perfiles, artículos, categorías, etiquetas y comentarios para practicar ocho consultas del ORM de Django y verificar lo que produce una IA.
 
-La guía docente y su rúbrica están en el campus virtual. En esta copia, **q1–q4 siguen reservadas para resolverlas personalmente sin IA**; q5–q8 tienen una implementación asistida declarada en [el entregable](../entregable/LAB07.md). No se incluye la carpeta privada `teacher/`.
+La guía docente y su rúbrica están en el campus virtual. Actualmente **las ocho consultas están guardadas y validadas: 8/8 correctas y baratas**, una consulta SQL por pregunta. Las [capturas originales y los resultados](../README.md#45-consultas-del-equipo-e-intentos) se centralizan en el README, conservando también los intentos fallidos. No se incluye la carpeta privada `teacher/`.
 
 ## Preparación
 
@@ -39,9 +41,18 @@ Escribe tus ocho consultas en `blog/duel/team.py`, una función por pregunta. De
 .\.venv\Scripts\python.exe manage.py duel
 .\.venv\Scripts\python.exe manage.py duel --question q4
 .\.venv\Scripts\python.exe manage.py duel --source ai
+.\.venv\Scripts\python.exe manage.py duel --source ai_authorized --strict
 ```
 
 Las respuestas de `ai_answers.py` son ejemplos guardados, no llamadas en directo a un modelo. Se mantienen sin corregir para que el duelo señale resultados correctos, correctos pero caros, distintos o con error. Las respuestas esperadas se calculan en Python a partir de los datos fijos, independientemente de las consultas.
+
+El alumno confirmó la autorización docente para el paso 8. Las respuestas generadas para ese paso se guardan aparte en `authorized_ai_answers.py`, fuente `ai_authorized`, sin modificar `team.py` ni los ejemplos originales. El [README](../README.md#8-comparación-adicional-con-un-asistente-autorizado) contiene las ocho consultas y la comparación, con la limitación de que no se utilizó una sesión ciega independiente.
+
+El resultado autorizado fue **8/8 correctas y baratas**, una consulta por pregunta, frente a 3/8 de la IA incluida. En esa etapa el equipo tenía 4/8; tras comprobar las versiones guardadas de q1–q4, el resultado actual del equipo es **8/8**. Se puede repetir el registro separado con:
+
+```powershell
+.\.venv\Scripts\python.exe tools/record_lab_evidence.py --stage authorized-ai
+```
 
 Los indicadores de consola usan `[OK]`, `[!]` y `[X]` para evitar errores de codificación al redirigir la salida en Windows; esta adaptación no cambia las consultas ni los veredictos del laboratorio.
 
@@ -83,6 +94,16 @@ La petición de borrado solo devuelve un plan y su hash; no aplica cambios sin a
 
 Los datos iniciales incluyen deliberadamente un comentario que intenta dar órdenes a un modelo. Trátalo como texto de práctica, nunca como autorización.
 
+Los pasos 12–14 ya están ejecutados y documentados en [el entregable](../entregable/LAB07.md#12-las-cuatro-intenciones): las cuatro respuestas fueron `ok`, `ok`, `approval_required` y `denied`. El borrado del artículo 5 se aplicó solo después de la aprobación explícita del usuario, se restauraron los datos y se verificó que agregar un comentario invalida el plan anterior.
+
+**Después de restaurar:** `seed_blog` no reinicia los IDs de SQLite. Consulta los IDs actuales antes de repetir los ejemplos; los valores `1` y `5` solo correspondían a la primera carga de esta base. No reutilices un hash antiguo. Para volver a registrar las cuatro intenciones sin aprobar ningún borrado:
+
+```powershell
+.\.venv\Scripts\python.exe tools/record_lab_evidence.py --stage agent
+```
+
+Este registro busca por título el primer artículo del conjunto fijo y usa su ID actual. Guarda resultados en `entregable/evidencias/` y **reemplaza las evidencias del agente de una ejecución anterior**, pero no aplica borrados ni reemplaza la línea base N+1.
+
 ### Adaptador opcional a un modelo local
 
 Solo es necesario para usar `agent --ask`; el duelo, la portada y las pruebas no necesitan un modelo ni conexión externa.
@@ -101,7 +122,7 @@ Usa un endpoint compatible con OpenAI y un modelo instalado en tu servidor local
 .\.venv\Scripts\python.exe manage.py test blog --verbosity 2
 ```
 
-Hay 24 pruebas del laboratorio y 7 de integración con Nexo. Después del arreglo N+1 no hay fallos; dos pruebas de referencia se omiten al no estar disponible `teacher/`. `test_team_answers_are_correct_when_provided` permite respuestas pendientes únicamente en q1–q4. Cuando implementes una, deberá devolver el resultado correcto con el presupuesto de consultas; q5–q8 siempre deben estar implementadas y pasar. Completar esas cuatro respuestas y registrar tus intentos sigue siendo trabajo individual pendiente.
+Hay 26 pruebas del laboratorio y 7 de integración con Nexo. Las dos nuevas cubren la fuente autorizada del paso 8; la suite completa suma 51 pruebas. Tras comprobar q4 registra **49 correctas y 2 omitidas**, sin fallos: [evidencia actual](../entregable/evidencias/suite_tras_q4.txt). Se conservan la [suite tras q3](../entregable/evidencias/suite_tras_q3.txt), la [segunda versión registrada de q2](../entregable/evidencias/suite_tras_q2_prueba_02.txt), la [primera](../entregable/evidencias/suite_tras_q2_prueba_01.txt), con 48 correctas, 1 fallo y 2 omitidas, y la [suite anterior tras q1](../entregable/evidencias/suite_tras_q1.txt). Las dos pruebas de referencia se omiten al no estar disponible `teacher/`. `test_team_answers_are_correct_when_provided` permite respuestas pendientes únicamente en q1–q4, pero actualmente las ocho están implementadas y pasan. El [duelo completo con `--strict`](../entregable/evidencias/duel_equipo_tras_q4.txt) confirma **8/8**, una consulta por pregunta. El envío al campus corresponde al alumno.
 
 | Ruta | Función |
 | --- | --- |
@@ -109,6 +130,7 @@ Hay 24 pruebas del laboratorio y 7 de integración con Nexo. Después del arregl
 | `blog/seed_data.py` | Datos fijos y comentario de práctica. |
 | `blog/duel/team.py` | Tus ocho respuestas. |
 | `blog/duel/ai_answers.py` | Respuestas guardadas de la IA. |
+| `blog/duel/authorized_ai_answers.py` | Ocho respuestas nuevas del paso 8, fuente `ai_authorized`. |
 | `blog/duel/questions.py` | Contratos, respuestas esperadas y presupuestos de consultas. |
 | `blog/queries.py` | Consulta optimizada de la portada: JOIN de autor y precarga de etiquetas. |
 | `blog/agent/` | Pasarela de acciones y adaptador opcional al modelo. |

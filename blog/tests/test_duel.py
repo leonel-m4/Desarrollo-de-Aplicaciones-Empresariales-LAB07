@@ -2,10 +2,14 @@
 reference answers, and the assistant's answers must fail in the way the lab says."""
 import importlib.util
 import unittest
+from io import StringIO
 
 from django.core.management import call_command
+from django.db.models import QuerySet
 from django.test import TestCase
 
+from blog.duel import authorized_ai_answers
+from blog.duel.questions import QUESTIONS
 from blog.duel.runner import run_all
 
 HAS_TEACHER = importlib.util.find_spec("teacher") is not None
@@ -44,6 +48,22 @@ class DuelTests(TestCase):
                 "q8": "wrong",   # drafts are not "never published"
             },
         )
+
+    def test_authorized_ai_answers_are_querysets_correct_and_cheap(self):
+        for question in QUESTIONS:
+            with self.subTest(question=question.key):
+                self.assertIsInstance(
+                    getattr(authorized_ai_answers, question.key)(), QuerySet,
+                )
+        for verdict in run_all("ai_authorized"):
+            with self.subTest(question=verdict.key):
+                self.assertEqual(verdict.status, "ok", verdict.detail)
+                self.assertEqual(verdict.queries, 1)
+
+    def test_command_accepts_authorized_ai_in_strict_mode(self):
+        out = StringIO()
+        call_command("duel", source="ai_authorized", strict=True, stdout=out)
+        self.assertIn("8 de 8 correctas y baratas", out.getvalue())
 
     def test_single_question(self):
         verdicts = run_all("ai", only="q4")
